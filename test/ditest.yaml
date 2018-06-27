@@ -1,0 +1,12 @@
+- q: lam s. lam z. z
+  a: lam.lam.0
+- q: lam s. lam z. s (s z)
+  a: lam.lam.1 (1 0)
+- q: lam m. lam n. lam s. lam z. m s (n s z)
+  a: lam.lam.lam.lam.3 1 (2 1 0)
+- q: lam f. (lam x. f (lam y. x x y)) (lam x. f (lam y. x x y))
+  a: lam.(lam.1 (lam.1 1 0)) (lam.1 (lam.1 1 0))
+- q: (lam x. (lam x. x)) (lam x. x)
+  a: (lam.(lam.0)) (lam.0)
+- q: (lam x.x x) (lam x.x x)
+  a: (lam.0 0) (lam.0 0)

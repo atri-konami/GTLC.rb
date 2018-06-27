@@ -1,0 +1,2 @@
+class NoRuleApplies < Exception
+end
