@@ -1,5 +1,6 @@
 require_relative "./Term"
 require_relative '../error/NoRuleApplies'
+require_relative '../error/LCTypeError'
 
 class Var < Term
     attr_reader :idx
@@ -29,6 +30,14 @@ class Var < Term
 
     def isVal
         false
+    end
+
+    def type(ctx=[], venv=[], cenv={})
+        if venv[@idx]
+            venv[@idx]
+        else
+            raise LCTypeError.new('TypeError on Var')
+        end
     end
 
     def to_s(ctx=[])

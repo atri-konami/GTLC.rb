@@ -1,6 +1,8 @@
 require_relative "./Term"
 require_relative "./Abs"
+require_relative '../type/Arrow'
 require_relative "../error/NoRuleApplies"
+require_relative "../error/LCTypeError"
 
 class App < Term
     attr_reader :left, :right
@@ -39,6 +41,16 @@ class App < Term
 
     def isVal
         false
+    end
+
+    def type(ctx=[], venv=[], cenv={})
+        t1 = @left.type(ctx, venv, cenv)
+        t2 = @right.type(ctx, venv, cenv)
+        if t1.instance_of?(Arrow) && t1.left === t2
+            t1.right
+        else
+            raise LCTypeError.new("TypeError on App", ctx, venv, cenv, @left, @right)
+        end
     end
 
     def to_s(ctx=[])

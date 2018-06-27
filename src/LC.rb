@@ -4,9 +4,11 @@ require_relative './term/App'
 require_relative './term/Var'
 require_relative './term/Const'
 require_relative './type/Type'
+require_relative './error/LCTypeError'
 
 module LC
     extend ParseHelper
+
     module_function
 
     def parse(tterm, env=[])
@@ -17,15 +19,9 @@ module LC
         if md = isAbs(term)
             sym = md[1]
             bod = md[2]
-            type = nil
-            if sym.include? ':'
-                st = sym.split(/: ?/)
-                sym = st[0]
-                type = Type.parse st[1]
-            end
             s = parse(bod, env.unshift(sym))
             env.shift
-            parsed = Abs.new(sym, type, s, existBracket)
+            parsed = Abs.new(sym, nil, s, existBracket)
             # puts "Abs: #{parsed.to_s(env)}"
             parsed
         elsif md = isVar(term)
@@ -50,9 +46,52 @@ module LC
         end
     end
 
+    def isApp(term)
+        tokens = term.split(' ')
+        md = Array.new(3)
+        (tokens.size - 2).downto(0) {|d|
+            form = tokens[0..d].join(' ')
+            latt = tokens[d+1..-1].join(' ')
+            if isTerm(trimBracket(form)) && isTerm(trimBracket(latt))
+                md[1] = form
+                md[2] = latt
+                break
+            end
+        }
+
+        if md[1] && md[2]
+            md
+        else
+            nil
+        end
+    end
+
+    def isAbs(term)
+        if term.match(/^lam ([a-z][1-9]*|[a-z][1-9]*: ?.+)\. ?(.+)$/) && $~ && isTerm(trimBracket($~[2]))
+            $~
+        else
+            nil
+        end
+    end
+
+    def isVar(term)
+        term.match /^([a-z][1-9]*)$/
+    end
+
+    def isTerm(term)
+        isAbs(term) || isVar(term) || isApp(term)
+    end
+
     def eval(term)
         begin
             parse(term).eval
+        #    lt = parse(term)
+        #    puts "#{lt} has a type of #{lt.type}"
+        #    lt.eval
+        #rescue LCTypeError => e
+        #    $stderr.puts e.message
+        #    $stderr.puts e.typeinfo
+        #    puts "evaluation did not execute."
         rescue => e
             $stderr.puts e.message
             $stderr.puts e.backtrace

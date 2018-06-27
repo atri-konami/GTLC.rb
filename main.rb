@@ -1,3 +1,4 @@
 require './src/LC'
+require './src/STLC'
 require './src/Console'
-LC.extend(Console).start
+STLC.extend(Console).start

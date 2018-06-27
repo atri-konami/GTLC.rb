@@ -15,6 +15,16 @@ class Arrow
     end
 
     def to_s
-        "#{@left} -> #{@right}"
+        "#{leftWithBracket} -> #{@right}"
+    end
+
+    private
+
+    def leftWithBracket
+        if @left.instance_of? Arrow
+            "(#{@left})"
+        else
+            @left
+        end
     end
 end

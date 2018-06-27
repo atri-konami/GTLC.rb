@@ -27,6 +27,10 @@ class Term
         raise NotImplementedError.new("You must implement #{self.class}##{__method__}")
     end
 
+    def typeof(ctx=[], venv=[], cenv={})
+        raise NotImplementedError.new("You must implement #{self.class}##{__method__}")
+    end
+
     def eval1(ctx)
         raise NotImplementedError.new("You must implement #{self.class}##{__method__}")
     end
@@ -45,6 +49,7 @@ class Term
            puts "\t---> #{t}"
            t.evalrec(ctx)
         rescue NoRuleApplies
+            puts
             t
         end
     end

@@ -1,5 +1,6 @@
 require_relative './Term'
 require_relative '../error/NoRuleApplies'
+require_relative '../error/LCTypeError'
 
 class Const < Term
     attr_reader :sym
@@ -7,17 +8,6 @@ class Const < Term
     def initialize(sym, existBracket=false)
         @sym = sym
         @existBracket = existBracket
-    end
-
-    def to_s(env=[])
-        until env.find_index(@sym).nil?
-            @sym += "'"
-        end
-        @sym
-    end
-
-    def isVal
-        true
     end
 
     def termShift(d, c=0)
@@ -28,8 +18,28 @@ class Const < Term
         self
     end
 
+    def isVal
+        true
+    end
+
+    def type(ctx=[], venv=[], cenv={})
+        if cenv.has_key? @sym
+            cenv[@sym]
+        else
+            raise LCTypeError.new('TypeError on Const', ctx, venv, cenv, @sym)
+        end
+    end
+
     def eval1(ctx)
         raise NoRuleApplies
     end
+
+    def to_s(env=[])
+        until env.find_index(@sym).nil?
+            @sym += "'"
+        end
+        @sym
+    end
+
 end
 
