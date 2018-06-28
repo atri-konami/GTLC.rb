@@ -1,8 +1,8 @@
 # Test for Typing
 
 require 'yaml'
-require_relative '../src/STLC'
-require_relative '../src/error/LCTypeError'
+require_relative '../../src/STLC'
+require_relative '../../src/error/LCTypeError'
 
 td = YAML.load_file('tytest.yaml')
 

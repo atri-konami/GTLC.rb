@@ -1,7 +1,7 @@
 # Test for De Bruijn Index Translation
 
 require 'yaml'
-require_relative '../src/LC'
+require_relative '../../src/LC'
 
 td = YAML.load_file('ditest.yaml')
 

@@ -1,7 +1,7 @@
 # Test for Reduction
 
 require 'yaml'
-require_relative '../src/LC'
+require_relative '../../src/LC'
 
 td = YAML.load_file('redtest.yaml')
 
