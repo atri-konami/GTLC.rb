@@ -1,0 +1,11 @@
+- q: (lam x.x) (lam y.y)
+  a: lam y. y
+- q: (lam x. lam y. x y) (lam z. z) (lam w. w w)
+  a: lam w. w w
+- q: (lam x. lam y. x) (lam y. y)
+  a: lam y. lam y'. y'
+- q: (lam x. lam y. y) (lam z. z)
+  a: lam y. y
+- q: (lam x. x) ((lam y. y) (lam z. lam w. z))
+  a: lam z. lam w. z
+

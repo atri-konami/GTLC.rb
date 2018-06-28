@@ -54,11 +54,37 @@ class App < Term
     end
 
     def to_s(ctx=[])
-        @left.existBracket = @left.instance_of? Abs
-        structTerm("#{@left.to_s(ctx)} #{@right.to_s(ctx)}")
+        #@left.existBracket = @left.instance_of? Abs
+        #structTerm("#{@left.to_s(ctx)} #{@right.to_s(ctx)}")
+        if @right.instance_of? App
+            rightStr = "(#{@right.to_s(ctx)})"
+        else
+            rightStr = @right.to_s(ctx)
+        end
+
+        if @left.instance_of? Abs
+            leftStr = "(#{@left.to_s(ctx)})"
+        else
+            leftStr = @left.to_s(ctx)
+        end
+
+        "#{leftStr} #{rightStr}"
     end
 
     def to_ds()
-        structTerm("#{@left.to_ds} #{@right.to_ds}")
+        if @right.instance_of? App
+            rightStr = "(#{@right.to_ds})"
+        else
+            rightStr = @right.to_ds
+        end
+
+        if @left.instance_of? Abs
+            leftStr = "(#{@left.to_ds})"
+        else
+            leftStr = @left.to_ds
+        end
+
+        "#{leftStr} #{rightStr}"
+        #structTerm("#{@left.to_ds} #{@right.to_ds}")
     end
 end

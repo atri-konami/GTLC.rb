@@ -41,13 +41,18 @@ class Abs < Term
     end
 
     def to_s(ctx=[])
+        while ctx.include? @sym
+            @sym += %Q(')
+        end
         ctx.unshift(@sym)
         str = "lam #{@sym}#{@argType ? ": #{@argType}"  : ""}. #{@bod.to_s(ctx)}"
         ctx.shift
-        structTerm(str)
+        #structTerm(str)
+        str
     end
 
     def to_ds
-        structTerm("lam.#{@bod.to_ds}")
+        #structTerm("lam.#{@bod.to_ds}")
+        "lam.#{bod.to_ds}"
     end
 end

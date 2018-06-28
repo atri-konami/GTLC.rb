@@ -41,10 +41,12 @@ class Var < Term
     end
 
     def to_s(ctx=[])
-        structTerm("#{ctx[@idx]}")
+        #structTerm("#{ctx[@idx]}")
+        "#{ctx[@idx]}"
     end
 
     def to_ds
-        structTerm("#{@idx}")
+        #structTerm("#{@idx}")
+        "#{@idx}"
     end
 end
