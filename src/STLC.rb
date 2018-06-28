@@ -21,7 +21,7 @@ module STLC
             # puts "Abs: #{parsed.to_s(env)}"
             parsed
         else
-            LC.parse(tterm, env)
+            super(tterm, env)
         end
     end
     
