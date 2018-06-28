@@ -8,3 +8,5 @@
   a: (B -> C) -> (A -> B) -> A -> C
 - q: lam f:A -> B -> C. lam x:B. lam y:A. f y x
   a: (A -> B -> C) -> B -> A -> C
+- q: (lam x:A. x) lam y:A. y
+  a: undefined

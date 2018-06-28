@@ -5,15 +5,14 @@ require_relative '../error/LCTypeError'
 class Var < Term
     attr_reader :idx
 
-    def initialize(idx, existBracket=false)
+    def initialize(idx)
         @idx = idx
-        @existBracket = existBracket
     end
 
     def termShift(d, c=0)
         idx = @idx
         idx += d if idx >= c
-        Var.new(idx, @existBracket)
+        Var.new(idx)
     end
 
     def termSubst(j, s, c=0)
@@ -41,12 +40,10 @@ class Var < Term
     end
 
     def to_s(ctx=[])
-        #structTerm("#{ctx[@idx]}")
         "#{ctx[@idx]}"
     end
 
     def to_ds
-        #structTerm("#{@idx}")
         "#{@idx}"
     end
 end

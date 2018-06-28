@@ -6,21 +6,20 @@ require_relative '../error/NoRuleApplies'
 class Abs < Term
     attr_reader :sym, :argType, :bod
 
-    def initialize(sym, type, bod, existBracket=false)
+    def initialize(sym, type, bod)
         @sym = sym
         @argType = type
         @bod = bod
-        @existBracket = existBracket
     end
 
     def termShift(d, c=0)
         bod = @bod.termShift(d, c + 1)
-        Abs.new(@sym, @argType, bod, @existBracket)
+        Abs.new(@sym, @argType, bod)
     end
 
     def termSubst(j, s, c=0)
         bod = @bod.termSubst(j, s, c + 1)
-        Abs.new(@sym, @argType, bod, @existBracket)
+        Abs.new(@sym, @argType, bod)
     end
 
     def eval1(ctx)
@@ -47,12 +46,10 @@ class Abs < Term
         ctx.unshift(@sym)
         str = "lam #{@sym}#{@argType ? ": #{@argType}"  : ""}. #{@bod.to_s(ctx)}"
         ctx.shift
-        #structTerm(str)
         str
     end
 
     def to_ds
-        #structTerm("lam.#{@bod.to_ds}")
         "lam.#{bod.to_ds}"
     end
 end

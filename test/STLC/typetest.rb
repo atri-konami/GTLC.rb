@@ -12,6 +12,7 @@ td.each_with_index{|data,i|
     rescue LCTypeError => e
         $stderr.puts "ERROR: #{e.message}"
         PP.pp(e.typeinfo, $stderr)
+        act = 'undefined'
     rescue => e
         $stderr.puts "ERROR: #{e.message}"
     ensure
@@ -22,9 +23,6 @@ td.each_with_index{|data,i|
         end
         puts "answer: #{data['a']}"
         puts "actual: #{act}"
+        puts
     end
 }
-
-
-
-

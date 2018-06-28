@@ -7,22 +7,21 @@ require_relative "../error/LCTypeError"
 class App < Term
     attr_reader :left, :right
 
-    def initialize(t1, t2, existBracket)
+    def initialize(t1, t2)
         @left = t1
         @right = t2
-        @existBracket = existBracket
     end
 
     def termShift(d, c=0)
         left = @left.termShift(d, c)
         right = @right.termShift(d, c)
-        App.new(left, right, @existBracket)
+        App.new(left, right)
     end
 
     def termSubst(j, s, c=0)
         left = @left.termSubst(j, s, c)
         right = @right.termSubst(j, s, c)
-        App.new(left, right, @existBracket)
+        App.new(left, right)
     end
 
     def eval1(ctx)
@@ -30,9 +29,9 @@ class App < Term
             if @right.isVal && @left.instance_of?(Abs)
                 @left.bod.termSubstTop @right
             elsif @left.isVal
-                App.new(@left, @right.eval1(ctx), @existBracket)
+                App.new(@left, @right.eval1(ctx))
             else
-                App.new(@left.eval1(ctx), @right, @existBracket)
+                App.new(@left.eval1(ctx), @right)
             end
         rescue NoRuleApplies => e
             self
@@ -54,8 +53,6 @@ class App < Term
     end
 
     def to_s(ctx=[])
-        #@left.existBracket = @left.instance_of? Abs
-        #structTerm("#{@left.to_s(ctx)} #{@right.to_s(ctx)}")
         if @right.instance_of? App
             rightStr = "(#{@right.to_s(ctx)})"
         else
@@ -85,6 +82,5 @@ class App < Term
         end
 
         "#{leftStr} #{rightStr}"
-        #structTerm("#{@left.to_ds} #{@right.to_ds}")
     end
 end

@@ -1,16 +1,6 @@
 require_relative '../error/NoRuleApplies'
 
 class Term
-    attr_accessor :existBracket
-
-    def structTerm(term)
-        if @existBracket
-            "(#{term})"
-        else
-            term
-        end
-    end
-    
     def termShift(d, c=0)
         raise NotImplementedError.new("You must implement #{self.class}##{__method__}")
     end

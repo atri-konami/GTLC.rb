@@ -4,7 +4,7 @@ class LCTypeError < Exception
         super(mes)
         @typeinfo = []
         terms.each{|t|
-            @typeinfo << "#{t.to_s(ctx)}: #{t.type(ctx, venv, cenv)}"
+            @typeinfo << [t.to_s(ctx), t.type(ctx, venv, cenv).to_s]
         }
     end
 end

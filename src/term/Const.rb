@@ -5,9 +5,8 @@ require_relative '../error/LCTypeError'
 class Const < Term
     attr_reader :sym
 
-    def initialize(sym, existBracket=false)
+    def initialize(sym)
         @sym = sym
-        @existBracket = existBracket
     end
 
     def termShift(d, c=0)
@@ -35,11 +34,7 @@ class Const < Term
     end
 
     def to_s(env=[])
-        until env.find_index(@sym).nil?
-            @sym += "'"
-        end
-        @sym
+        "#{@sym}"
     end
-
 end
 

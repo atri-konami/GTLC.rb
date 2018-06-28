@@ -13,7 +13,6 @@ module LC
 
     def parse(tterm, env=[])
         term = trimBracket(tterm)
-        existBracket = tterm != term
         parsed = nil
 
         if md = isAbs(term)
@@ -21,9 +20,9 @@ module LC
             bod = md[2]
             s = parse(bod, env.unshift(sym))
             env.shift
-            parsed = Abs.new(sym, nil, s, existBracket)
+            parsed = Abs.new(sym, nil, s)
             # puts "Abs: #{parsed.to_s(env)}"
-            parsed
+            # parsed
         elsif md = isVar(term)
             sym = md[1]
             idx = env.find_index sym
@@ -31,16 +30,16 @@ module LC
                 $stderr.puts "Error: #{sym} does not exist in environment"
                 parsed = Const.new(sym)
             else
-                parsed = Var.new(idx, existBracket)
+                parsed = Var.new(idx)
                 # puts "Var: #{parsed.to_s(env)}"
             end
             parsed
         elsif md = isApp(term)
             s1 = parse(md[1], env)
             s2 = parse(md[2], env)
-            parsed = App.new(s1, s2, existBracket)
+            parsed = App.new(s1, s2)
             # puts "App: #{parsed.to_s(env)}"
-            parsed
+            # parsed
         else
             raise "Error: invalid term"
         end
@@ -85,13 +84,6 @@ module LC
     def eval(term)
         begin
             parse(term).eval
-        #    lt = parse(term)
-        #    puts "#{lt} has a type of #{lt.type}"
-        #    lt.eval
-        #rescue LCTypeError => e
-        #    $stderr.puts e.message
-        #    $stderr.puts e.typeinfo
-        #    puts "evaluation did not execute."
         rescue => e
             $stderr.puts e.message
             $stderr.puts e.backtrace

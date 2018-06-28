@@ -8,7 +8,6 @@ module STLC
 
     def parse(tterm, env=[])
         term = trimBracket(tterm)
-        existBracket = tterm != term
         parsed = nil
 
         if md = isAbs(term)
@@ -17,7 +16,7 @@ module STLC
             bod = md[3]
             s = parse(bod, env.unshift(sym))
             env.shift
-            parsed = Abs.new(sym, type, s, existBracket)
+            parsed = Abs.new(sym, type, s)
             # puts "Abs: #{parsed.to_s(env)}"
             parsed
         else
