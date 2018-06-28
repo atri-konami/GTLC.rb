@@ -1,0 +1,10 @@
+- q: (lam x:A->A. x) (lam y:A. y)
+  a: A -> A
+- q: (lam x:A->A.lam y:A.x y) (lam z:A.z)
+  a: A -> A
+- q: lam f:A->B. lam x:A.f x
+  a: (A -> B) -> A -> B
+- q: lam f:B -> C. lam g:A -> B. lam x:A. f (g x)
+  a: (B -> C) -> (A -> B) -> A -> C
+- q: lam f:A -> B -> C. lam x:B. lam y:A. f y x
+  a: (A -> B -> C) -> B -> A -> C

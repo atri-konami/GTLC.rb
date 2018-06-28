@@ -1,13 +1,17 @@
-# Test for De Bruijn Index Translation
+# Test for Typing
 
 require 'yaml'
-require_relative '../src/LC'
+require_relative '../src/STLC'
+require_relative '../src/error/LCTypeError'
 
-td = YAML.load_file('ditest.yaml')
+td = YAML.load_file('tytest.yaml')
 
 td.each_with_index{|data,i|
     begin
-        act = LC.parse(data['q']).to_ds
+        act = STLC.parse(data['q']).type.to_s
+    rescue LCTypeError => e
+        $stderr.puts "ERROR: #{e.message}"
+        PP.pp(e.typeinfo, $stderr)
     rescue => e
         $stderr.puts "ERROR: #{e.message}"
     ensure
@@ -20,3 +24,7 @@ td.each_with_index{|data,i|
         puts "actual: #{act}"
     end
 }
+
+
+
+
