@@ -8,11 +8,7 @@ module Console
             if term.nil? || term == 'exit'
                 exit 0
             end
-            puts ParseHelper.trimBracket(eval(term).to_s)
+            puts eval(term)
         end
-    end
-
-    def eval(str)
-        str
     end
 end

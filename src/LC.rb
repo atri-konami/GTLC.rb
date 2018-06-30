@@ -6,12 +6,10 @@ require_relative './term/Const'
 require_relative './type/Type'
 require_relative './error/LCTypeError'
 
-module LC
+class LC
     extend ParseHelper
 
-    module_function
-
-    def parse(tterm, env=[])
+    def self.parse(tterm, env=[])
         term = trimBracket(tterm)
         parsed = nil
 
@@ -45,7 +43,7 @@ module LC
         end
     end
 
-    def isApp(term)
+    def self.isApp(term)
         tokens = term.split(' ')
         md = Array.new(3)
         (tokens.size - 2).downto(0) {|d|
@@ -65,7 +63,7 @@ module LC
         end
     end
 
-    def isAbs(term)
+    def self.isAbs(term)
         if term.match(/^lam ([a-z][1-9]*|[a-z][1-9]*: ?.+)\. ?(.+)$/) && $~ && isTerm(trimBracket($~[2]))
             $~
         else
@@ -73,17 +71,19 @@ module LC
         end
     end
 
-    def isVar(term)
+    def self.isVar(term)
         term.match /^([a-z][1-9]*)$/
     end
 
-    def isTerm(term)
+    def self.isTerm(term)
         isAbs(term) || isVar(term) || isApp(term)
     end
 
-    def eval(term)
+    def self.eval(term)
         begin
-            parse(term).eval
+            t = parse(term).eval
+            pp "hoge"
+            t.to_s
         rescue => e
             $stderr.puts e.message
             $stderr.puts e.backtrace

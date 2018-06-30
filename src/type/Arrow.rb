@@ -1,4 +1,7 @@
-class Arrow
+require_relative './Type'
+require_relative './Any'
+
+class Arrow < Type
     attr_reader :left, :right
 
     def initialize(left, right)
@@ -6,9 +9,21 @@ class Arrow
         @right = right
     end
 
+    def isConsistentWith(other)
+        if other.instance_of? Arrow
+            @left.isConsistentWith(other.left) && @right.isConsistentWith(other.right)
+        elsif other.instance_of? Any
+            true
+        else
+            false
+        end
+    end
+
     def ===(other)
         if other.instance_of?(Arrow)
             self.left === other.left && self.right === other.right
+        elsif other.instance_of? Any
+            true
         else
             false
         end
