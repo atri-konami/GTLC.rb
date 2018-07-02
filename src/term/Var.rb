@@ -31,15 +31,11 @@ class Var < Term
         false
     end
 
-    def type(ctx=[], venv=[], cenv={})
-        if venv[@idx]
-            venv[@idx]
-        else
-            raise LCTypeError.new('TypeError on Var')
-        end
+    def type(ctx)
+        ctx.typesAt(@idx) || (raise LCTypeError.new('TypeError on Var'))
     end
 
-    def to_s(ctx=[])
+    def to_s(ctx)
         "#{ctx[@idx]}"
     end
 

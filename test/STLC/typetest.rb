@@ -3,18 +3,21 @@
 require 'yaml'
 require_relative '../../src/STLC'
 require_relative '../../src/error/LCTypeError'
+require_relative '../../src/env/TypeContext'
 
 td = YAML.load_file('tytest.yaml')
 
 td.each_with_index{|data,i|
     begin
-        act = STLC.parse(data['q']).type.to_s
+        ctx = TypeContext.new
+        act = STLC.parse(data['q'], ctx).type(ctx).to_s
     rescue LCTypeError => e
         $stderr.puts "ERROR: #{e.message}"
         PP.pp(e.typeinfo, $stderr)
         act = 'undefined'
     rescue => e
         $stderr.puts "ERROR: #{e.message}"
+        PP.pp(e.backtrace, $stderr)
     ensure
         if act == data['a']
             puts "No.#{i}: #{data['q']} --> ok"

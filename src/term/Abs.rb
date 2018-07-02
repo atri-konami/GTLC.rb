@@ -30,22 +30,20 @@ class Abs < Term
         true
     end
 
-    def type(ctx=[], venv=[], cenv={})
-        ctx.unshift @sym
-        venv.unshift @argType
-        bodType = @bod.type(ctx, venv, cenv)
-        venv.shift
+    def type(ctx)
+        ctx.unshift(@sym, @argType)
+        bodType = @bod.type(ctx)
         ctx.shift
         Arrow.new(@argType, bodType)
     end
 
-    def to_s(ctx=[])
+    def to_s(ctx)
         while ctx.include? @sym
             @sym += %Q(')
         end
-        ctx.unshift(@sym)
+        ctx.unshiftName @sym
         str = "lam #{@sym}#{@argType ? ": #{@argType}"  : ""}. #{@bod.to_s(ctx)}"
-        ctx.shift
+        ctx.shiftName
         str
     end
 

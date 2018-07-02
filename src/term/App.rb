@@ -42,17 +42,17 @@ class App < Term
         false
     end
 
-    def type(ctx=[], venv=[], cenv={})
-        t1 = @left.type(ctx, venv, cenv)
-        t2 = @right.type(ctx, venv, cenv)
+    def type(ctx)
+        t1 = @left.type(ctx)
+        t2 = @right.type(ctx)
         if t1.instance_of?(Arrow) && t1.left === t2
             t1.right
         else
-            raise LCTypeError.new("TypeError on App", ctx, venv, cenv, @left, @right)
+            raise LCTypeError.new("TypeError on App", ctx, @left, @right)
         end
     end
 
-    def to_s(ctx=[])
+    def to_s(ctx)
         if @right.instance_of? App
             rightStr = "(#{@right.to_s(ctx)})"
         else

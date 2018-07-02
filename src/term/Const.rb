@@ -21,8 +21,8 @@ class Const < Term
         true
     end
 
-    def type(ctx=[], venv=[], cenv={})
-        if cenv.has_key? @sym
+    def type(ctx=[])
+        if ctx[]
             cenv[@sym]
         else
             raise LCTypeError.new('TypeError on Const', ctx, venv, cenv, @sym)

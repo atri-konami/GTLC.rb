@@ -25,8 +25,8 @@ class Term
         raise NotImplementedError.new("You must implement #{self.class}##{__method__}")
     end
 
-    def eval(ctx=[])
-        puts self
+    def eval(ctx)
+        puts self.to_s(ctx)
         evalrec(ctx)
     end
 
@@ -36,11 +36,11 @@ class Term
         t = self
         begin
            t = eval1(ctx)
-           puts "\t---> #{t}"
+           puts "\t---> #{t.to_s(ctx)}"
            t.evalrec(ctx)
         rescue NoRuleApplies
             puts
-            t
+            t.to_s(ctx)
         end
     end
 end

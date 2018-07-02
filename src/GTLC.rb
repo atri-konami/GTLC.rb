@@ -4,7 +4,7 @@ require_relative './ParseHelper'
 require_relative './type/Any'
 
 class GTLC < STLC
-    def self.parse(tterm, env=[])
+    def self.parse(tterm, ctx)
         term = trimBracket(tterm)
         parsed = nil
 
@@ -12,8 +12,8 @@ class GTLC < STLC
             sym = md[1]
             type = typeParse(md[2])
             bod = md[3]
-            s = parse(bod, env.unshift(sym))
-            env.shift
+            s = parse(bod, ctx.unshift(sym))
+            ctx.shift
             parsed = Abs.new(sym, type, s)
             # puts "Abs: #{parsed.to_s(env)}"
             parsed

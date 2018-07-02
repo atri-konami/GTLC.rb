@@ -4,37 +4,37 @@ require_relative './term/App'
 require_relative './term/Var'
 require_relative './term/Const'
 require_relative './type/Type'
+require_relative './env/Context'
 require_relative './error/LCTypeError'
 
 class LC
     extend ParseHelper
 
-    def self.parse(tterm, env=[])
+    def self.parse(tterm, ctx)
         term = trimBracket(tterm)
         parsed = nil
 
         if md = isAbs(term)
             sym = md[1]
             bod = md[2]
-            s = parse(bod, env.unshift(sym))
-            env.shift
+            s = parse(bod, ctx.unshift(sym))
+            ctx.shift
             parsed = Abs.new(sym, nil, s)
             # puts "Abs: #{parsed.to_s(env)}"
             # parsed
         elsif md = isVar(term)
             sym = md[1]
-            idx = env.find_index sym
+            idx = ctx.find_index sym
             if idx.nil?
-                $stderr.puts "Error: #{sym} does not exist in environment"
-                parsed = Const.new(sym)
+                raise "Error: #{sym} does not exist in context"
             else
                 parsed = Var.new(idx)
                 # puts "Var: #{parsed.to_s(env)}"
             end
-            parsed
+            # parsed
         elsif md = isApp(term)
-            s1 = parse(md[1], env)
-            s2 = parse(md[2], env)
+            s1 = parse(md[1], ctx)
+            s2 = parse(md[2], ctx)
             parsed = App.new(s1, s2)
             # puts "App: #{parsed.to_s(env)}"
             # parsed
@@ -64,7 +64,7 @@ class LC
     end
 
     def self.isAbs(term)
-        if term.match(/^lam ([a-z][1-9]*|[a-z][1-9]*: ?.+)\. ?(.+)$/) && $~ && isTerm(trimBracket($~[2]))
+        if term.match(/^lam ([a-z][1-9]*)\. ?(.+)$/) && $~ && isTerm(trimBracket($~[2]))
             $~
         else
             nil
@@ -72,18 +72,22 @@ class LC
     end
 
     def self.isVar(term)
-        term.match /^([a-z][1-9]*)$/
+        term.match /^([a-z0-9]+)$/
     end
 
     def self.isTerm(term)
         isAbs(term) || isVar(term) || isApp(term)
     end
 
-    def self.eval(term)
+    def self.eval(term, ctx=nil)
         begin
-            t = parse(term).eval
-            pp "hoge"
-            t.to_s
+            if ctx
+                ctx = Context.new(ctx.names)
+            else
+                ctx = Context.new
+            end
+            t = parse(term, ctx).eval(ctx)
+            t.to_s(ctx)
         rescue => e
             $stderr.puts e.message
             $stderr.puts e.backtrace
