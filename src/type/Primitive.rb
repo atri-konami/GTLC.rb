@@ -8,6 +8,10 @@ class Primitive < Type
         @type = tstr
     end
 
+    def isGround
+        true
+    end
+
     def isConsistentWith(other)
         self === other || other.instance_of?(Any)
     end

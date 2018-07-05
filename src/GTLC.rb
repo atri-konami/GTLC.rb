@@ -18,7 +18,7 @@ class GTLC < STLC
             # puts "Abs: #{parsed.to_s(env)}"
             parsed
         else
-            super(tterm, env)
+            super(tterm, ctx)
         end
     end
     
@@ -35,6 +35,34 @@ class GTLC < STLC
             Any.new
         else
             super(tstr)
+        end
+    end
+
+    def self.eval(term, ctx)
+        begin
+            if ctx
+                ctx = TypeContext.new(ctx['names'], ctx['types'].map{|t| typeParse(t)})
+            else
+                ctx = TypeContext.new
+            end
+            lt = parse(term, ctx)
+            puts "#{lt.to_s(ctx)} has a type #{lt.type(ctx)}"
+            puts "Cast Insertion:"
+            ct = lt.toCast(ctx)
+            puts "#{ct.to_s(ctx)} has a type #{ct.type(ctx)}"
+            puts
+            puts "Evaluation: "
+            t = ct.eval(ctx)
+            "#{t.to_s(ctx)}: #{t.type(ctx)}"
+        rescue LCTypeError => e
+            $stderr.puts e.message
+            $stderr.puts e.typeinfo
+            puts "evaluation did not execute."
+            ""
+        rescue => e
+            $stderr.puts e.message
+            $stderr.puts e.backtrace
+            ""
         end
     end
 end

@@ -37,6 +37,10 @@ class Abs < Term
         Arrow.new(@argType, bodType)
     end
 
+    def toCast(ctx)
+        self
+    end
+
     def to_s(ctx)
         while ctx.include? @sym
             @sym += %Q(')

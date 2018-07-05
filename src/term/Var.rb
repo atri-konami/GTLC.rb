@@ -1,4 +1,5 @@
-require_relative "./Term"
+require_relative './Term'
+require_relative './Cast'
 require_relative '../error/NoRuleApplies'
 require_relative '../error/LCTypeError'
 
@@ -28,11 +29,15 @@ class Var < Term
     end
 
     def isVal
-        false
+        true
     end
 
     def type(ctx)
         ctx.typesAt(@idx) || (raise LCTypeError.new('TypeError on Var'))
+    end
+
+    def toCast(ctx)
+        self
     end
 
     def to_s(ctx)

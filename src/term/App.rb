@@ -1,5 +1,6 @@
 require_relative "./Term"
 require_relative "./Abs"
+require_relative "./Cast"
 require_relative '../type/Arrow'
 require_relative "../error/NoRuleApplies"
 require_relative "../error/LCTypeError"
@@ -26,7 +27,9 @@ class App < Term
 
     def eval1(ctx)
         begin 
-            if @right.isVal && @left.instance_of?(Abs)
+            if @left.instance_of?(Cast) && @left.term.isVal && @left.isArrowCast && @right.isVal
+                Cast.new(App.new(@left.term, Cast.new(@right, @left.dest.dom, @left.source.dom)), @left.source.cod, @left.dest.cod)
+            elsif @right.isVal && @left.instance_of?(Abs)
                 @left.bod.termSubstTop @right
             elsif @left.isVal
                 App.new(@left, @right.eval1(ctx))
@@ -44,12 +47,26 @@ class App < Term
 
     def type(ctx)
         t1 = @left.type(ctx)
+        if t1.instance_of?(Any)
+            t1 = Arrow.new(Any.new, Any.new)
+        end
         t2 = @right.type(ctx)
-        if t1.instance_of?(Arrow) && t1.left === t2
-            t1.right
+        if t1.instance_of?(Arrow) && t1.dom.isConsistentWith(t2)
+            t1.cod
         else
             raise LCTypeError.new("TypeError on App", ctx, @left, @right)
         end
+    end
+
+    def toCast(ctx)
+        cleft = @left.toCast(ctx)
+        ltype = ldest = @left.type(ctx)
+        if ltype.instance_of?(Any)
+            ldest = Arrow.new(Any.new, Any.new)
+        end
+        cright= @right.toCast(ctx)
+        rtype = @right.type(ctx)
+        App.new(Cast.new(cleft, ltype, ldest), Cast.new(cright, rtype, ldest.dom))
     end
 
     def to_s(ctx)

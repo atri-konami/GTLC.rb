@@ -8,6 +8,10 @@ class Any < Type
         true
     end
 
+    def isGround
+        false
+    end
+
     def ===(other)
         true
     end

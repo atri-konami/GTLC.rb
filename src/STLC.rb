@@ -2,6 +2,7 @@ require_relative './LC'
 require_relative './ParseHelper'
 require_relative './type/Primitive'
 require_relative './type/Arrow'
+require_relative './env/TypeContext'
 
 class STLC < LC
     def self.parse(tterm, ctx)
@@ -60,13 +61,13 @@ class STLC < LC
     def self.eval(term, ctx)
         begin
             if ctx
-                ctx = TypeContext.new(ctx.names, ctx.types)
+                ctx = TypeContext.new(ctx['names'], ctx['types'].map{|t| typeParse(t)})
             else
                 ctx = TypeContext.new
             end
             lt = parse(term, ctx)
-            puts "#{lt} has a type of #{lt.type(ctx)}"
-            puts "Evalation:"
+            puts "#{lt.to_s(ctx)} has a type of #{lt.type(ctx)}"
+            puts "Evaluation:"
             t = lt.eval(ctx)
             "#{t.to_s(ctx)}: #{t.type(ctx)}"
         rescue LCTypeError => e

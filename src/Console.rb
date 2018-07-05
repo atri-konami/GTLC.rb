@@ -7,11 +7,14 @@ module Console
         puts "Input context file in ./env if you use"
         file = Readline.readline(">> ", true)
         ctx = nil
-        if ! file.nil?
-            ap = File.expand_path("./env/#{file}", File.dirname(__FILE__)))
+        if file != ""
+            ap = File.expand_path("./env/#{file}", File.dirname(__FILE__))
             if FileTest.exist? ap
+                puts "load from #{ap}"
                 ctx = YAML.load_file(ap)
             end
+        else
+            puts "No env file specified"
         end
 
         loop do

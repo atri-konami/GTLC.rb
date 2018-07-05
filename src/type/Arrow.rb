@@ -2,16 +2,20 @@ require_relative './Type'
 require_relative './Any'
 
 class Arrow < Type
-    attr_reader :left, :right
+    attr_reader :dom, :cod
 
-    def initialize(left, right)
-        @left = left
-        @right = right
+    def initialize(dom, cod)
+        @dom = dom
+        @cod = cod
+    end
+
+    def isGround
+        @dom.instance_of?(Any) && @cod.instance_of?(Any)
     end
 
     def isConsistentWith(other)
         if other.instance_of? Arrow
-            @left.isConsistentWith(other.left) && @right.isConsistentWith(other.right)
+            @dom.isConsistentWith(other.dom) && @cod.isConsistentWith(other.cod)
         elsif other.instance_of? Any
             true
         else
@@ -21,7 +25,7 @@ class Arrow < Type
 
     def ===(other)
         if other.instance_of?(Arrow)
-            self.left === other.left && self.right === other.right
+            self.dom === other.dom && self.cod === other.cod
         elsif other.instance_of? Any
             true
         else
@@ -30,16 +34,16 @@ class Arrow < Type
     end
 
     def to_s
-        "#{leftWithBracket} -> #{@right}"
+        "#{domWithBracket} -> #{@cod}"
     end
 
     private
 
-    def leftWithBracket
-        if @left.instance_of? Arrow
-            "(#{@left})"
+    def domWithBracket
+        if @dom.instance_of? Arrow
+            "(#{@dom})"
         else
-            @left
+            @dom
         end
     end
 end
