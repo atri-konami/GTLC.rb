@@ -1,0 +1,8 @@
+- q: "(lam x. x) (lam y:Int. y) 1"
+  a: "*"
+- q: "(lam x. x) (lam y:Int. y)"
+  a: "*"
+- q: "(lam x. succ x) true"
+  a: "Int"
+- q: "(lam y:Int. succ y) ((lam x.x) 1)"
+  a: "Int"

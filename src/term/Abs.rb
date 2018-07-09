@@ -38,7 +38,10 @@ class Abs < Term
     end
 
     def toCast(ctx)
-        self
+        ctx.unshift(@sym, @argType)
+        bod = @bod.toCast(ctx)
+        ctx.shift
+        Abs.new(@sym, @argType, bod)
     end
 
     def to_s(ctx)

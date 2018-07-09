@@ -36,7 +36,6 @@ class STLC < LC
         if !tstr.include?('->') && !tstr.include?('(') && !tstr.include?(')')
             Primitive.new(tstr)
         else
-            ret = nil
             ts = tstr.split(/ ?-> ?/)
             0.upto(ts.size-2) {|d|
                 form = ts[0..d].join('->')

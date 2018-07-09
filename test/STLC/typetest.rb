@@ -5,7 +5,7 @@ require_relative '../../src/STLC'
 require_relative '../../src/error/LCTypeError'
 require_relative '../../src/env/TypeContext'
 
-td = YAML.load_file('tytest.yaml')
+td = YAML.load_file('typetest.yaml')
 
 td.each_with_index{|data,i|
     begin

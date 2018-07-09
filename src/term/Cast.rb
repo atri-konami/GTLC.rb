@@ -1,5 +1,6 @@
 require_relative './Term'
 require_relative '../error/NoRuleApplies'
+require_relative '../error/CastError'
 require_relative '../error/LCTypeError'
 require_relative '../type/Primitive'
 require_relative '../type/Arrow'
@@ -53,7 +54,7 @@ class Cast < Term
             then @term
         when
             @term.instance_of?(Cast) && @term.dest.instance_of?(Any) && self.source.instance_of?(Any) && @term.source.isGround && self.dest.isGround
-            then @term.source === self.dest ? @term.term : (raise NoRuleApplies)
+            then @term.source === self.dest ? @term.term : (raise CastError.new("CastError", self, ctx))
         when @source.instance_of?(Arrow) && @dest.instance_of?(Any)
             then Cast.new(Cast.new(@term, @source, Arrow.new(Any.new, Any.new)), Arrow.new(Any.new, Any.new), @dest)
         when @source.instance_of?(Any) && @dest.instance_of?(Arrow)

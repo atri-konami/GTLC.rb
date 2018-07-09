@@ -36,13 +36,11 @@ class App < Term
             else
                 App.new(@left.eval1(ctx), @right)
             end
-        rescue NoRuleApplies => e
-            self
         end
     end
 
     def isVal
-        false
+        @left.instance_of?(Var) && @right.isVal
     end
 
     def type(ctx)

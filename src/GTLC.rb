@@ -23,7 +23,7 @@ class GTLC < STLC
     end
     
     def self.isAbs(term)
-        if term.match(/^lam ([a-z][1-9]*):? ?([a-zA-Z]*?)\. ?(.+)$/) && $~ && isTerm(trimBracket($~[3]))
+        if term.match(/^lam ([a-z][1-9]*):? ?(.*?)\. ?(.+)$/) && $~ && isTerm(trimBracket($~[3]))
             $~
         else
             nil

@@ -37,7 +37,7 @@ class Term
         begin
            t = eval1(ctx)
            puts "\t---> #{t.to_s(ctx)}"
-           gets
+           #gets
            t.evalrec(ctx)
         rescue NoRuleApplies
             puts
